@@ -1,0 +1,45 @@
+# Temperature Prediction using Polynomial Regression
+# Simple Python Project
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import PolynomialFeatures
+
+from sklearn.linear_model import LinearRegression
+
+# Sample data
+# Days
+X = np.array([1, 2, 3, 4, 5, 6, 7]).reshape(-1, 1)
+
+# Temperature values
+y = np.array([30, 32, 35, 37, 40, 42, 45])
+
+# Convert to polynomial features
+poly = PolynomialFeatures(degree=2)
+X_poly = poly.fit_transform(X)
+
+# Train the model
+model = LinearRegression()
+model.fit(X_poly, y)
+
+# Predict temperature for future days
+future_days = np.array([8, 9, 10]).reshape(-1, 1)
+future_poly = poly.transform(future_days)
+
+predicted_temp = model.predict(future_poly)
+
+# Print predicted temperatures
+print("Predicted Temperatures:")
+for day, temp in zip(future_days, predicted_temp):
+    print(f"Day {day[0]} : {temp:.2f} °C")
+
+# Graph
+plt.scatter(X, y, color='blue', label='Actual Data')
+plt.plot(X, model.predict(X_poly), color='red', label='Polynomial Regression')
+
+plt.xlabel("Days")
+plt.ylabel("Temperature")
+plt.title("Temperature Prediction using Polynomial Regression")
+plt.legend()
+
+plt.show()
